@@ -73,9 +73,26 @@ const getPlayerStatName = (req,res) => {
     })
 }
 
+//PUT
+//change the xp of player
+
+const updatePlayerXp = (req, res) => {
+    const {id} = req.params;
+    const {xp} = req.body;
+    console.log('id:', id, 'xp:', xp);
+
+    try {
+        db.query("UPDATE player SET xp = ? WHERE id = ?", [xp, id]);
+        res.json({message: 'Xp updates successfully'});
+
+    }catch (err){
+        res.status(500).json({ error: 'Unable to update the xp'});
+    }
+}
+
 
 
 module.exports = {
     getPlayerByID, getPlayerMainSkills, getPlayerPassiveSkills, getPlayerStat,
-    getPlayerStatName
+    getPlayerStatName, updatePlayerXp
 }

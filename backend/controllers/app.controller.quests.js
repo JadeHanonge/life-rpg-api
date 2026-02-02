@@ -1,8 +1,10 @@
 const db = require('../config/db');
 
+//GET
 //recuperer all quest
 const getALLQuests = (req, res) => {
-    db.query('SELECT * FROM quests', (err, results) => {
+    db.query('SELECT q.id, q.name AS quest_name, q.done, q.rewards, t.name AS quest_type FROM quests q JOIN type_quest t ON q.type_quest_id = t.id', 
+        (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -66,9 +68,26 @@ const getRestQuests = (req,res) => {
     })
 }
 
+//PUt
+//changer le statu done
+const updateStateQuest = (req,res) => {
+    const {id} = req.params;
+    const {done} = req.body;
+
+    try {
+        db.query("UPDATE quests SET done = ? WHERE id = ?", [done, id]);
+        res.json({message: 'State updates successfully'});
+
+    }catch (err){
+        res.status(500).json({ error: 'Unable to update the state of the quest'});
+    }
+}
+
+
+
 
 
 module.exports = {
     getALLQuests, getDailyQuests, getWeeklyQuests, getMainQuests,
-    getSideQuests, getRestQuests
+    getSideQuests, getRestQuests, updateStateQuest
 }
