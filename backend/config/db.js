@@ -1,6 +1,6 @@
-const e = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
+
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
@@ -9,19 +9,22 @@ const db = mysql.createPool({
   database : process.env.DB_NAME,
   port : process.env.DB_PORT,
   waitForConnections : true,
-  connectionLimit : 10,
-  queueLimit : 0
+    connectionLimit : 10,
+    queueLimit : 0
 });
 
-db.getConnection((err, connection) => {
-  if (err) {
-    console.error('Erreur de connexion à la base de données :', err);
-    return;
-  }else{
-    console.log('Connecté à la base de données MySQL');
+
+
+
+(async () => { 
+  try{
+    const connection = await db.getConnection();
+    console.log("Connecté à la base de données");
     connection.release();
+  }catch (err) {
+    console.error("Erreur de connexion a la base de données : ", err);
   }
+})();
 
-});
 
 module.exports = db;

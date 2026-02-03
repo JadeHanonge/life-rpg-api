@@ -2,87 +2,43 @@ const db = require('../config/db');
 
 //founction pour tous ce qui vien du player
 //recupere un player par son ID, reupere level + xp + pseudo
-const getPlayerByID = (req,res) => {
+const getPlayerByID = async (req,res) => {
     const{id} = req.params;
-    
-     db.query('SELECT * FROM player WHERE id = ?', [id], (err, results) => {
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'player not found' });
-        }
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    });
+    try {
+        const [rows] = await db.query('SELECT * FROM player WHERE id = ?', [id]);
+        res.json(rows);
+    }catch (err){
+        res.status(500).json({ error: 'Unable to fetch player'});
+    }
+     
            
     
 };
 
-//recupere main skill
-const getPlayerMainSkills = (req,res) => {
-    db.query('SELECT * FROM player_skills WHERE player_id = 1 AND type_skill_player_id = 1', (err, results) => {
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'player skill not found' });
-        }
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    })
-}
-
-//recupere passive skill
-const getPlayerPassiveSkills = (req,res) => {
-    db.query('SELECT * FROM player_skills WHERE player_id = 1 AND type_skill_player_id = 2', (err, results) => {
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'player skill not found' });
-        }
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    })
-}
-
 //recupere les stat du joueur
-const getPlayerStat = (req,res) => {
-    db.query('SELECT stat.name, player_stat.point FROM player_stat JOIN stat ON player_stat.stat_id = stat.id ', 
-        (err, results) => {
-            if (results.length === 0) {
-                return res.status(404).json({ error: 'player stat not found' });
-            }
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.json(results);
-        }   
-    )
+const getPlayerStat = async (req,res) => {
+
+    try{
+        const [rows] = await db.query('SELECT stat.name, player_stat.point FROM player_stat JOIN stat ON player_stat.stat_id = stat.id ');
+        res.json(rows);
+    }catch (err){
+        res.status(500).json({ error: 'Unable fetxh the stat of the player'});
+    }
+
 }
 
-//fetch name stat by their id
-const getPlayerStatName = (req,res) => {
-    
-    db.query('SELECT * FROM stat', (err, results) => {
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'Stat not found' });
-        }
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    })
-}
+
 
 //PUT
 //change the xp of player
 
-const updatePlayerXp = (req, res) => {
+const updatePlayerXp = async (req, res) => {
     const {id} = req.params;
     const {xp} = req.body;
-    console.log('id:', id, 'xp:', xp);
+    //console.log('id:', id, 'xp:', xp);
 
     try {
-        db.query("UPDATE player SET xp = ? WHERE id = ?", [xp, id]);
+        await db.query("UPDATE player SET xp = ? WHERE id = ?", [xp, id]);
         res.json({message: 'Xp updates successfully'});
 
     }catch (err){
@@ -93,6 +49,6 @@ const updatePlayerXp = (req, res) => {
 
 
 module.exports = {
-    getPlayerByID, getPlayerMainSkills, getPlayerPassiveSkills, getPlayerStat,
-    getPlayerStatName, updatePlayerXp
+    getPlayerByID, getPlayerStat,
+    updatePlayerXp
 }
