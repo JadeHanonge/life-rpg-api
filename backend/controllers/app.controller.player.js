@@ -9,22 +9,17 @@ const getPlayerByID = async (req,res) => {
         res.json(rows);
     }catch (err){
         res.status(500).json({ error: 'Unable to fetch player'});
-    }
-     
-           
-    
+    }   
 };
 
 //recupere les stat du joueur
 const getPlayerStat = async (req,res) => {
-
     try{
         const [rows] = await db.query('SELECT stat.name, player_stat.point, stat.id FROM player_stat JOIN stat ON player_stat.stat_id = stat.id ');
         res.json(rows);
     }catch (err){
         res.status(500).json({ error: 'Unable fetxh the stat of the player'});
     }
-
 }
 
 
@@ -34,7 +29,6 @@ const getPlayerStat = async (req,res) => {
 const updatePlayerXp = async (req, res) => {
     const {id} = req.params;
     const {xp} = req.body;
-    //console.log('id:', id, 'xp:', xp);
 
     try {
         await db.query("UPDATE player SET xp = ? WHERE id = ?", [xp, id]);
@@ -49,7 +43,6 @@ const updatePlayerXp = async (req, res) => {
 const updatePlayerLevel = async (req, res) => {
     const {id} = req.params;
     const {level, maxXp} = req.body;
-    //console.log('id:', id, 'xp:', xp);
 
     try {
         await db.query("UPDATE player SET level = ? , max_xp = ? WHERE id = ?", [level, maxXp, id]);
@@ -64,7 +57,6 @@ const updatePlayerLevel = async (req, res) => {
 const updateStat = async (req, res) => {
     const {id} = req.params;
     const {point, stat_id} = req.body;
-    //console.log("player id: ", id, "point: ", point, "stat id: ", stat_id);
      
     try{
         await db.query("UPDATE player_stat SET point = ? WHERE player_id = ? AND stat_id = ?", [point, id, stat_id])

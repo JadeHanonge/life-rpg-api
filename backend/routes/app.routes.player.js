@@ -9,5 +9,4 @@ router.put('/updateXp/:id', updatePlayerXp);
 router.put('/updateStat/:id', updateStat);
 router.put('/updatePlayerLevel/:id', updatePlayerLevel)
 
-
 module.exports = router;
