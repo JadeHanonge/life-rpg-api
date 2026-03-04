@@ -15,7 +15,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options('*', cors());
+app.options('/{*path}', cors());
 
 // Utiliser les routes définies dans routes.js
 app.use(express.json());
