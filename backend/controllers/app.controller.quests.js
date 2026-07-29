@@ -107,10 +107,26 @@ const deleteQuest = async (req, res) => {
     }
 }
 
+//delete step
+const deleteQuestStep = async (req, res) => {
+    const { id } = req.params;
+    console.log("id: ", id);
+
+
+    try {
+        await db.query(`DELETE FROM quest_step WHERE id = ?`, [id]);
+        res.json({ message: 'Quest delete successfully' });
+
+    } catch (err) {
+        res.status(500).json({ error: 'Unable to delete the quest step', err });
+    }
+}
+
+
 
 
 
 
 module.exports = {
-    getALLQuests, getStepQuest, updateStateQuest, addQuest, addStepQuest, getQuestsType, deleteQuest
+    getALLQuests, getStepQuest, updateStateQuest, addQuest, addStepQuest, getQuestsType, deleteQuest, deleteQuestStep
 }
