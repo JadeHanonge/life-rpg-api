@@ -38,11 +38,11 @@ npm install
 ```
 
 Configurer un fichier `.env` à la racine avec les identifiants de connexion à ta base MySQL :
-DB_HOST=localhost
-DB_USER=user
-DB_PASSWORD=mot_de_passe
-DB_NAME=life_rpg
-PORT=3000
+DB_HOST=localhost  
+DB_USER=user  
+DB_PASSWORD=mot_de_passe  
+DB_NAME=life_rpg  
+PORT=3000  
 
 
 Lancer le serveur :
